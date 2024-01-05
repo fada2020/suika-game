@@ -28,3 +28,13 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
+    # https://blogshine.tistory.com/432
+    - name: Slack Notification
+      if: always()
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_ICON_EMOJI: ":bell:"
+        SLACK_CHANNEL: mnist-project
+        SLACK_MESSAGE: "Upload & Run pipeline :rocket: - ${{job.status}}"
+        SLACK_USERNAME: Github
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
