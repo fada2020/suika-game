@@ -29,6 +29,7 @@ jobs:
     - name: build
       run: |
         pwd
+        cd ..
         npm install
         npm run build
     
