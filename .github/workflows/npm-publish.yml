@@ -26,16 +26,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: npm
-    - name: install
-      run: npm install
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: npm
     - name: build
-      run: npm run build
+      run: |
+        npm install
+        npm run build
     
   build:
     needs: test
