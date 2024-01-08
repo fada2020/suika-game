@@ -34,12 +34,11 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-    - name: install
+    - name: install and build
       run: |
-        cd suika-game
-        npm install
-    - name: build
-      run: npm run build
+            cd suika-game
+            npm install
+            npm run build
     - name: Deploy build outputs
       uses: appleboy/scp-action@master
       with:
