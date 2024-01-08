@@ -28,6 +28,7 @@ jobs:
         cache: npm
     - name: build
       run: |
+        pwd
         npm install
         npm run build
     
