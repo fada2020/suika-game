@@ -32,8 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M:%S')"
+      run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
     - name: Discord Webhook Action
       uses: tsickert/discord-webhook@v5.3.0
       with:
@@ -42,6 +41,6 @@ jobs:
           🌟 **배포 완료!** 🌟
           👏 오늘자 리뷰 할당 현황 알려드려요!
           ---
-          🚀 *배포 일자:* ${{ steps.date.outputs.date }}
+          🚀 *배포 일자:* ${{ env.NOW }}
           🌐 *서버:* Production
           🎉 *GIT 주소:* [GIT 바로가기](https://github.com/fada2020/suika-game)
