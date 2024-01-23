@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: suika
     env:
-      DEV_PATH: /home/opc
+      DEV_PATH: /home/opc/suika-game
       GIT_URL: git@github.com:fada2020/suika-game.git
     steps:
       - uses: actions/checkout@v3
@@ -22,8 +22,7 @@ jobs:
           whoami
           mkdir -p ${{ env.DEV_PATH }} && cd ${{ env.DEV_PATH }}  # 프로젝트 경로로 수정
           if [ ! -d ${{ env.DEV_PATH }} ]; then
-            git clone -b ${{ env.GIT_URL }}
+            git clone -b ${{ env.GIT_URL }} .
           else
-            mkdir -p ${{ env.DEV_PATH }}/suika-game && cd ${{ env.DEV_PATH }}/suika-game  # Create the directory if it doesn't exist
             git pull ${{ env.GIT_URL }}    # 변경 사항을 가져오기 test
           fi
