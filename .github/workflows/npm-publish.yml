@@ -26,3 +26,4 @@ jobs:
           else
             git pull ${{ env.GIT_URL }}    # 변경 사항을 가져오기 test
           fi
+          npm run build
