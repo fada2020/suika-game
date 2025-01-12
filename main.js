@@ -47,7 +47,7 @@ const topLine = Bodies.rectangle(310, 150, 620, 2, {
   isStatic: true,
   isSensor: true,
   render: { fillStyle: "#E6B143" }
-})
+});
 
 World.add(world, [leftWall, rightWall, ground, topLine]);
 
@@ -79,15 +79,60 @@ function addFruit() {
 }
 
 window.onkeydown = (event) => {
-  if (disableAction) {
-    return;
+  handleKeyPress(event.code);
+};
+
+window.onkeyup = (event) => {
+  handleKeyRelease(event.code);
+};
+
+// 터치 이벤트 처리
+let touchStartX = null;
+
+window.addEventListener("touchstart", (event) => {
+  if (disableAction) return;
+  const touch = event.touches[0];
+  touchStartX = touch.clientX;
+});
+
+window.addEventListener("touchmove", (event) => {
+  if (!currentBody || disableAction) return;
+  const touch = event.touches[0];
+  const deltaX = touch.clientX - touchStartX;
+
+  if (deltaX < 0 && currentBody.position.x - currentFruit.radius > 30) {
+    Body.setPosition(currentBody, {
+      x: currentBody.position.x - 1,
+      y: currentBody.position.y,
+    });
+  } else if (deltaX > 0 && currentBody.position.x + currentFruit.radius < 590) {
+    Body.setPosition(currentBody, {
+      x: currentBody.position.x + 1,
+      y: currentBody.position.y,
+    });
   }
 
-  switch (event.code) {
-    case "KeyA":
-      if (interval)
-        return;
+  touchStartX = touch.clientX;
+});
 
+window.addEventListener("touchend", () => {
+  if (!disableAction) {
+    currentBody.isSleeping = false;
+    disableAction = true;
+
+    setTimeout(() => {
+      addFruit();
+      disableAction = false;
+    }, 1000);
+  }
+});
+
+function handleKeyPress(code) {
+  if (disableAction) return;
+
+  switch (code) {
+    case "KeyA":
+      if (interval) return;
       interval = setInterval(() => {
         if (currentBody.position.x - currentFruit.radius > 30)
           Body.setPosition(currentBody, {
@@ -98,15 +143,13 @@ window.onkeydown = (event) => {
       break;
 
     case "KeyD":
-      if (interval)
-        return;
-
+      if (interval) return;
       interval = setInterval(() => {
         if (currentBody.position.x + currentFruit.radius < 590)
-        Body.setPosition(currentBody, {
-          x: currentBody.position.x + 1,
-          y: currentBody.position.y,
-        });
+          Body.setPosition(currentBody, {
+            x: currentBody.position.x + 1,
+            y: currentBody.position.y,
+          });
       }, 5);
       break;
 
@@ -122,8 +165,8 @@ window.onkeydown = (event) => {
   }
 }
 
-window.onkeyup = (event) => {
-  switch (event.code) {
+function handleKeyRelease(code) {
+  switch (code) {
     case "KeyA":
     case "KeyD":
       clearInterval(interval);
